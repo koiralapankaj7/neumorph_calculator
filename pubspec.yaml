@@ -1,6 +1,6 @@
 name: neumorph_calculator
-description: A new Flutter package project.
-version: 1.0.0
+description: Neumorph calculator is an application which is inspired by https://neumorphism.io/. Using this package You can create neumorphic widget and use in your project.
+version: 1.0.0+1
 homepage: https://github.com/koiralapankajgit/neumorph_calculator
 
 environment:
