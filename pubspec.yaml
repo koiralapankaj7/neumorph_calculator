@@ -1,6 +1,6 @@
 name: neumorph_calculator
 description: Neumorph calculator is an application which is inspired by https://neumorphism.io/. Using this package You can create neumorphic widget and use in your project.
-version: 1.0.0+1
+version: 1.0.0+3
 homepage: https://github.com/koiralapankajgit/neumorph_calculator
 
 environment:
