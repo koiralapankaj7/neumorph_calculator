@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 class CustomisedDecoration extends Decoration {
-  final ShapeBorder shape;
+  final ShapeBorder? shape;
   final double depth;
-  final double blur;
-  final List<Color> colors;
+  final double? blur;
+  final List<Color>? colors;
   final double opacity;
   final Alignment lightSource;
 
   CustomisedDecoration({
-    @required this.shape,
-    @required this.depth,
+    required this.shape,
+    required this.depth,
     this.blur,
     this.colors = const [Colors.black87, Colors.white],
     this.opacity = 1.0,
@@ -23,24 +23,25 @@ class CustomisedDecoration extends Decoration {
         assert(colors == null || colors.length == 2);
 
   @override
-  BoxPainter createBoxPainter([onChanged]) =>
-      _CustomisedDecorationPainter(shape, depth, blur, colors, opacity, lightSource);
+  BoxPainter createBoxPainter([void Function()? onChanged]) =>
+      _CustomisedDecorationPainter(
+          shape, depth, blur, colors, opacity, lightSource);
 
   @override
-  EdgeInsetsGeometry get padding => shape.dimensions;
+  EdgeInsetsGeometry get padding => shape!.dimensions;
 
   @override
-  Decoration lerpFrom(Decoration a, double t) {
+  Decoration? lerpFrom(Decoration? a, double t) {
     if (a is CustomisedDecoration) {
       t = Curves.easeInOut.transform(t);
       return CustomisedDecoration(
         shape: ShapeBorder.lerp(a.shape, shape, t),
-        depth: ui.lerpDouble(a.depth, depth, t),
+        depth: ui.lerpDouble(a.depth, depth, t)!,
         colors: [
-          Color.lerp(a.colors[0], colors[0], t),
-          Color.lerp(a.colors[1], colors[1], t),
+          Color.lerp(a.colors![0], colors![0], t)!,
+          Color.lerp(a.colors![1], colors![1], t)!,
         ],
-        opacity: ui.lerpDouble(a.opacity, opacity, t),
+        opacity: ui.lerpDouble(a.opacity, opacity, t)!,
       );
     }
     return null;
@@ -48,10 +49,10 @@ class CustomisedDecoration extends Decoration {
 }
 
 class _CustomisedDecorationPainter extends BoxPainter {
-  ShapeBorder shape;
+  ShapeBorder? shape;
   double depth;
-  double blur;
-  List<Color> colors;
+  double? blur;
+  List<Color>? colors;
   double opacity;
   Alignment lightSource;
 
@@ -65,21 +66,22 @@ class _CustomisedDecorationPainter extends BoxPainter {
   ) {
     if (depth > 0) {
       colors = [
-        colors[1],
-        colors[0],
+        colors![1],
+        colors![0],
       ];
     } else {
       depth = -depth;
     }
     colors = [
-      colors[0].withOpacity(opacity),
-      colors[1].withOpacity(opacity),
+      colors![0].withOpacity(opacity),
+      colors![1].withOpacity(opacity),
     ];
   }
 
   @override
-  void paint(ui.Canvas canvas, ui.Offset offset, ImageConfiguration configuration) {
-    final shapePath = shape.getOuterPath(offset & configuration.size);
+  void paint(
+      ui.Canvas canvas, ui.Offset offset, ImageConfiguration configuration) {
+    final shapePath = shape!.getOuterPath(offset & configuration.size!);
     final rect = shapePath.getBounds();
 
     final delta = 16 / rect.longestSide;
@@ -92,17 +94,19 @@ class _CustomisedDecorationPainter extends BoxPainter {
     canvas.save();
     canvas.clipPath(shapePath);
 
-    final paint = Paint()..maskFilter = MaskFilter.blur(BlurStyle.normal, depth);
+    final paint = Paint()
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, depth);
     final clipSize = rect.size.aspectRatio > 1
         ? Size(rect.width, rect.height / 2)
         : Size(rect.width / 2, rect.height);
     for (final alignment in [Alignment.topLeft, Alignment.bottomRight]) {
-      final Rect shaderRect = alignment.inscribe(Size.square(rect.longestSide), rect);
+      final Rect shaderRect =
+          alignment.inscribe(Size.square(rect.longestSide), rect);
       paint
         ..shader = ui.Gradient.linear(
           _lightSourceOffset(lightSource, shaderRect),
           _lightSourceOppositeOffset(lightSource, shaderRect),
-          colors,
+          colors!,
           stops,
         );
       canvas.save();
