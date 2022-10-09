@@ -4,7 +4,7 @@ import 'package:neumorph_calculator/src/neumorph_decoration.dart';
 
 class Neumorph extends StatelessWidget {
   const Neumorph({
-    Key key,
+    Key? key,
     this.height = 200.0,
     this.width = 200.0,
     this.radius = 40.0,
@@ -18,7 +18,7 @@ class Neumorph extends StatelessWidget {
   })  : assert(intensity != null ? intensity >= 0.0 && intensity <= 1.0 : true),
         super(key: key);
 
-  final Widget child;
+  final Widget? child;
   final double height;
   final double width;
   final double radius;
@@ -159,7 +159,7 @@ class Neumorph extends StatelessWidget {
 enum NeumorphShape { flat, concave, convex, pressed }
 
 extension ColorUtils on Color {
-  Color mix(Color another, double amount) {
+  Color? mix(Color another, double amount) {
     return Color.lerp(this, another, amount);
   }
 }
